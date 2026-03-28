@@ -1,0 +1,34 @@
+services:
+  # Backend Service (Go)
+  - type: web
+    name: jobnest-backend
+    runtime: go
+    region: oregon
+    rootDir: backend
+    buildCommand: go build -o main ./cmd
+    startCommand: ./main
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: MONGODB_URI
+        value: mongodb+srv://kushwahaarpit360_db_user:QfqLraDV9k60xSSu@cluster0.qqjflxn.mongodb.net/job-portal?retryWrites=true&w=majority
+      - key: JWT_SECRET
+        value: radar-language-laugh
+      - key: SOLANA_ADMIN_WALLET
+        value: H95yJptKwwFzYwU5U3sMX3imVCmosiERKSwfQgGAx8Uf
+      - key: SOLANA_NETWORK
+        value: devnet
+
+  # AI Service (Python)
+  - type: web
+    name: jobnest-ai-service
+    runtime: python
+    region: oregon
+    rootDir: ai
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 5000
